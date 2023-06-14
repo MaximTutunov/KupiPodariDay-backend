@@ -10,6 +10,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
+const { QUERY_FAIL_ERR } = process.env;
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -34,7 +36,7 @@ export class UsersService {
     } catch (error) {
       if (error instanceof QueryFailedError) {
         const err = error.driverError;
-        if (err.code === '23505') {
+        if (err.code === QUERY_FAIL_ERR) {
           throw new ConflictException(
             'Пользователь с таким email или username существует',
           );
@@ -72,7 +74,7 @@ export class UsersService {
     } catch (error) {
       if (error instanceof QueryFailedError) {
         const err = error.driverError;
-        if (err.code === '23505') {
+        if (err.code === QUERY_FAIL_ERR) {
           throw new ConflictException(
             'Пользователь с таким email или username существует',
           );
